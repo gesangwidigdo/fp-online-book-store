@@ -23,12 +23,12 @@ import Link from "next/link";
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/",
     icon: Home,
   },
   {
     title: "Keranjang",
-    url: "#",
+    url: "/keranjang",
     icon: ShoppingCart,
   },
   {
@@ -38,7 +38,7 @@ const items = [
   },
   {
     title: "Settings",
-    url: "#",
+    url: "/settings",
     icon: Settings,
   },
 ];

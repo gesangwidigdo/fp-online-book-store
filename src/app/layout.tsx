@@ -11,10 +11,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <SidebarProvider>
           <AppSidebar />
-          <main>
-            <SidebarTrigger />
-            {children}
-          </main>
+          <SidebarTrigger />
+          <main className={"m-8 w-full"}>{children}</main>
         </SidebarProvider>
       </body>
     </html>
