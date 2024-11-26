@@ -6,6 +6,7 @@ import (
 
 	"github.com/Djuanzz/go-template/config"
 	"github.com/Djuanzz/go-template/controller"
+	"github.com/Djuanzz/go-template/middleware"
 	"github.com/Djuanzz/go-template/model"
 	"github.com/Djuanzz/go-template/repository"
 	"github.com/Djuanzz/go-template/router"
@@ -31,6 +32,7 @@ func main() {
 	defer config.CloseDatabase(db)
 
 	server := gin.Default()
+	server.Use(middleware.CORSMiddleware())
 	router.User(server, userController)
 
 	if err := model.Migrate(db); err != nil {

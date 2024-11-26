@@ -19,6 +19,7 @@ func RequireAuth(ctx *gin.Context) {
 	if err != nil {
 		res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, err.Error())
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, res)
+		return
 	}
 
 	// --- Decode
@@ -42,13 +43,13 @@ func RequireAuth(ctx *gin.Context) {
 		// Cek `exp`
 		exp, ok := claims["exp"].(float64)
 		if !ok {
-			res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, "Invalid token expiration time")
+			res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, dto.ERR_TOKEN_EXP_TIME)
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, res)
 			return
 		}
 
 		if time.Now().Unix() > int64(exp) {
-			res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, "Token expired")
+			res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, dto.ERR_TOKEN_EXP)
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, res)
 			return
 		}
@@ -56,7 +57,7 @@ func RequireAuth(ctx *gin.Context) {
 		// Cek `sub`
 		userId, ok := claims["sub"].(string)
 		if !ok {
-			res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, "Invalid user ID in token")
+			res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, dto.ERR_TOKEN_USER_ID)
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, res)
 			return
 		}
@@ -64,8 +65,9 @@ func RequireAuth(ctx *gin.Context) {
 		ctx.Set("user", userId)
 		ctx.Next()
 	} else {
-		res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, "Invalid token")
+		res := utils.ResponseFailed(dto.MSG_AUTH_FAILED, dto.ERR_INVALID_TOKEN)
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, res)
+		return
 	}
 
 	// --- Check exp

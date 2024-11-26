@@ -47,4 +47,8 @@ var (
 	ERR_EMAIL_ALREADY_EXISTS    = errors.New("email already exists")
 	ERR_LOGIN                   = errors.New("invalid email or password")
 	ERR_USER_NOT_FOUND          = errors.New("user not found")
+	ERR_TOKEN_EXP               = errors.New("token expired")
+	ERR_TOKEN_EXP_TIME          = errors.New("Invalid token expiration time")
+	ERR_TOKEN_USER_ID           = errors.New("Invalid user ID in token")
+	ERR_INVALID_TOKEN           = errors.New("Invalid token")
 )
