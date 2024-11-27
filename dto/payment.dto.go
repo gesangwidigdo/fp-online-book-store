@@ -1,7 +1,7 @@
 package dto
 
 type CreatePaymentRequest struct {
-	Change float64 `json:"change"`
+	Change float64 `json:"change" form:"change" binding:"required"`
 }
 
 const (

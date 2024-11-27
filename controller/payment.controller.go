@@ -33,6 +33,7 @@ func (pc *paymentController) Create(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, res)
 		return
 	}
+	// fmt.Println(paymentReq)
 
 	response, err := pc.midtransService.GenerateSnapUrl(paymentReq)
 
