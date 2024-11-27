@@ -7,6 +7,7 @@ func Migrate(db *gorm.DB) error {
 		&User{},
 		&Book{},
 		&Transaction{},
+		&Payment{},
 		&BookTransaction{},
 	)
 	if err != nil {

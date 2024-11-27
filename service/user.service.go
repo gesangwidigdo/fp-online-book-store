@@ -24,7 +24,7 @@ func NewUserService(ur repository.UserRepository) UserService {
 }
 
 func (us *userService) Register(userReq dto.UserRegisterReq) (dto.UserRegisterRes, error) {
-	isUsername, err := us.userRepo.IsUsernameExist(userReq.Username)
+	isUsername, err := us.userRepo.IsUsernameExist(userReq.Name)
 	if err != nil {
 		return dto.UserRegisterRes{}, err
 	}
@@ -48,8 +48,12 @@ func (us *userService) Register(userReq dto.UserRegisterReq) (dto.UserRegisterRe
 
 	user := model.User{
 		Email:    userReq.Email,
-		Username: userReq.Username,
+		Name: userReq.Name,
 		Password: password,
+		Address: userReq.Address,
+		Gender: userReq.Gender,
+		PhoneNumber: userReq.PhoneNumber,
+		BirthDate: userReq.BirthDate,
 	}
 
 	usr, err := us.userRepo.Register(user)
@@ -59,7 +63,7 @@ func (us *userService) Register(userReq dto.UserRegisterReq) (dto.UserRegisterRe
 
 	return dto.UserRegisterRes{
 		Email:    usr.Email,
-		Username: usr.Username,
+		Name: usr.Name,
 	}, nil
 }
 
@@ -103,6 +107,6 @@ func (us *userService) Me(id string) (dto.UserMeRes, error) {
 
 	return dto.UserMeRes{
 		Email:    user.Email,
-		Username: user.Username,
+		Name: user.Name,
 	}, nil
 }

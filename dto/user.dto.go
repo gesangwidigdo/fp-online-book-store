@@ -3,14 +3,18 @@ package dto
 import "errors"
 
 type UserRegisterReq struct {
-	Email    string `json:"email" form:"email" binding:"required"`
-	Password string `json:"password" form:"password" binding:"required"`
-	Username string `json:"username" form:"username" binding:"required"`
+	Email    	string `json:"email" form:"email" binding:"required"`
+	Password 	string `json:"password" form:"password" binding:"required"`
+	Name	 	string `json:"name" form:"name" binding:"required"`
+	Address	 	string `json:"address" form:"address" binding:"required"`
+	Gender 	 	string `json:"gender" form:"gender" binding:"required"`
+	PhoneNumber string `json:"phone_number" form:"phone_number" binding:"required"`
+	BirthDate 	string `json:"birth_date" form:"birth_date" binding:"required"`
 }
 
 type UserRegisterRes struct {
 	Email    string `json:"email"`
-	Username string `json:"username"`
+	Name	 string `json:"name"`
 }
 
 type UserLoginReq struct {
@@ -25,7 +29,7 @@ type UserLoginRes struct {
 
 type UserMeRes struct {
 	Email    string `json:"email"`
-	Username string `json:"username"`
+	Name	 string `json:"name"`
 }
 
 const (
