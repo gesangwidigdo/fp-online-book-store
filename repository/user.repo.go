@@ -10,7 +10,7 @@ import (
 type UserRepository interface {
 	Register(user model.User) (model.User, error)
 	IsEmailExist(email string) (bool, error)
-	IsUsernameExist(username string) (bool, error)
+	IsUsernameExist(name string) (bool, error)
 	FindUserByEmmail(email string) (model.User, error)
 	FindUserById(id string) (model.User, error)
 }
@@ -69,9 +69,9 @@ func (r *userRepository) IsEmailExist(email string) (bool, error) {
 	return true, nil
 }
 
-func (ur *userRepository) IsUsernameExist(username string) (bool, error) {
+func (ur *userRepository) IsUsernameExist(name string) (bool, error) {
 	var user model.User
-	err := ur.DB.Where("username = ?", username).First(&user).Error
+	err := ur.DB.Where("name = ?", name).First(&user).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false, nil // Username tidak ditemukan
