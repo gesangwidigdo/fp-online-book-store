@@ -10,7 +10,7 @@ type Book struct {
 	Author          string        `gorm:"type:varchar(255);not null" json:"author" form:"author" binding:"required"`
 	Summary         string        `gorm:"type:text;not null" json:"summary" form:"summary" binding:"required"`
 	BookImage       string        `gorm:"type:text" json:"book_image" form:"book_image" binding:"required"`
-	PublicationYear string        `gorm:"type:varchar(4)" json:"publication_year" form:"publication_year" binding:"required"`
+	PublicationYear uint64        `gorm:"type:int" json:"publication_year" form:"publication_year" binding:"required"`
 	Price           float64       `gorm:"type:decimal(10,2);default:0;not null" json:"price" form:"price" binding:"required"`
 
 	// Relationship
