@@ -23,13 +23,16 @@ var (
 
 	userRepo repository.UserRepository = repository.NewUserRepository(db)
 	paymentRepo repository.PaymentRepository = repository.NewPaymentRepository(db)
+	bookRepo repository.BookRepository = repository.NewBookRepository(db)
 
 	userService service.UserService = service.NewUserService(userRepo)
 	midtransService service.MidtransService = service.NewMidtransService(s)
 	paymentService service.PaymentService = service.NewPaymentService(paymentRepo)
+	bookService service.BookService = service.NewBookService(bookRepo)
 
 	userController controller.UserController = controller.NewUserController(userService)
 	paymentController controller.PaymentController = controller.NewPaymentController(paymentService, midtransService)
+	bookController controller.BookController = controller.NewBookController(bookService)
 
 )
 
@@ -46,6 +49,7 @@ func main() {
 
 	router.User(server, userController)
 	router.Payment(server, paymentController)
+	router.Book(server, bookController)
 
 	if err := model.Migrate(db); err != nil {
 		panic("Failed to migrate database")
