@@ -1,6 +1,10 @@
 package dto
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/google/uuid"
+)
 
 type BookReq struct {
 	ISBN            string  `json:"isbn" form:"isbn" binding:"required"`
@@ -14,39 +18,39 @@ type BookReq struct {
 }
 
 type BookCreateRes struct {
-	ID    string `json:"id"`
-	Title string `json:"title"`
-	Price string `json:"price"`
+	ID    uuid.UUID `json:"id"`
+	Title string    `json:"title"`
+	Price string    `json:"price"`
 }
 
 type BookListRes struct {
-	ID      string `json:"id"`
-	Title   string `json:"title"`
-	Author  string `json:"author"`
-	Summary string `json:"summary"`
-	Price   float64 `json:"price"`
+	ID      uuid.UUID `json:"id"`
+	Title   string    `json:"title"`
+	Author  string    `json:"author"`
+	Summary string    `json:"summary"`
+	Price   float64   `json:"price"`
 }
 
 type BookDetailRes struct {
-	ID              string `json:"id"`
-	ISBN            string `json:"isbn"`
-	Title           string `json:"title"`
-	Author          string `json:"author"`
-	Summary         string `json:"summary"`
-	BookImage       string `json:"book_image"`
-	PublicationYear uint64 `json:"publication_year"`
-	Price           float64 `json:"price"`
+	ID              uuid.UUID `json:"id"`
+	ISBN            string    `json:"isbn"`
+	Title           string    `json:"title"`
+	Author          string    `json:"author"`
+	Summary         string    `json:"summary"`
+	BookImage       string    `json:"book_image"`
+	PublicationYear uint64    `json:"publication_year"`
+	Price           float64   `json:"price"`
 }
 
 type BookUpdateRes struct {
-	ID              string `json:"id"`
-	ISBN            string `json:"isbn"`
-	Title           string `json:"title"`
-	Author          string `json:"author"`
-	Summary         string `json:"summary"`
-	BookImage       string `json:"book_image"`
-	PublicationYear uint64 `json:"publication_year"`
-	Price           float64 `json:"price"`
+	ID              uuid.UUID `json:"id"`
+	ISBN            string    `json:"isbn"`
+	Title           string    `json:"title"`
+	Author          string    `json:"author"`
+	Summary         string    `json:"summary"`
+	BookImage       string    `json:"book_image"`
+	PublicationYear uint64    `json:"publication_year"`
+	Price           float64   `json:"price"`
 }
 
 const (
