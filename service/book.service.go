@@ -61,7 +61,7 @@ func (bs *bookService) Create(bookReq dto.BookReq) (dto.BookCreateRes, error) {
 	}
 
 	return dto.BookCreateRes{
-		ID:    newBook.ID.String(),
+		ID:    newBook.ID,
 		Title: newBook.Title,
 		Price: fmt.Sprintf("%.2f", newBook.Price),
 	}, nil
@@ -76,7 +76,7 @@ func (bs *bookService) GetAll() ([]dto.BookListRes, error) {
 	var bookList []dto.BookListRes
 	for _, book := range books {
 		bookList = append(bookList, dto.BookListRes{
-			ID:      book.ID.String(),
+			ID:      book.ID,
 			Title:   book.Title,
 			Author:  book.Author,
 			Summary: book.Summary,
@@ -94,7 +94,7 @@ func (bs *bookService) GetBySlug(slug string) (dto.BookDetailRes, error) {
 	}
 
 	return dto.BookDetailRes{
-		ID:              book.ID.String(),
+		ID:              book.ID,
 		ISBN:            book.ISBN,
 		Title:           book.Title,
 		Author:          book.Author,
@@ -149,7 +149,7 @@ func (bs *bookService) Update(id uuid.UUID, bookReq dto.BookReq) (dto.BookUpdate
 	}
 
 	return dto.BookUpdateRes{
-		ID:              id.String(),
+		ID:              id,
 		ISBN:            updatedBook.ISBN,
 		Title:           updatedBook.Title,
 		Author:          updatedBook.Author,
