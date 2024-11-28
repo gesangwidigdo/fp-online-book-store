@@ -1,13 +1,19 @@
 package model
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Payment struct {
 	ID     uuid.UUID `gorm:"type:uuid;primary_key;default:uuid_generate_v4()" json:"id" form:"id" binding:"required"`
-	Paid   float64   `gorm:"type:decimal(10,2);not null" json:"paid" form:"paid" binding:"required"`
-	Change float64   `gorm:"type:decimal(10,2);not null" json:"change" form:"change" binding:"required"`
-	TransactionID uuid.UUID `gorm:"foreignKey:TransactionID" json:"transaction"`
-
+	Method string `gorm:"type:varchar(50);null" json:"method" form:"method" binding:"required"`
+	Amount int64 `gorm:"type:bigint;not null" json:"amount" form:"amount" binding:"required"`
+	Status string `gorm:"type:varchar(50);default:pending" json:"status" form:"status" binding:"required"`
+	Date	time.Time  `gorm:"type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"date" form:"date"`
+	TransactionID uuid.UUID    `gorm:"type:uuid;null" json:"transaction_id"`
+	
 	// Relationship
-	Transaction	 Transaction
+	Transaction   Transaction `gorm:"foreignKey:TransactionID;references:ID" json:"transaction"`
 }

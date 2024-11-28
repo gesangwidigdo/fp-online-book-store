@@ -19,18 +19,17 @@ import (
 
 var (
 	db *gorm.DB = config.ConnectDatabase()
-	s snap.Client = *config.ConnectMidtrans()
+	client *snap.Client = config.ConnectMidtrans()
 
 	userRepo repository.UserRepository = repository.NewUserRepository(db)
 	paymentRepo repository.PaymentRepository = repository.NewPaymentRepository(db)
 
 	userService service.UserService = service.NewUserService(userRepo)
-	midtransService service.MidtransService = service.NewMidtransService(s)
+	midtransService service.MidtransService = service.NewMidtransService(client)
 	paymentService service.PaymentService = service.NewPaymentService(paymentRepo)
 
 	userController controller.UserController = controller.NewUserController(userService)
 	paymentController controller.PaymentController = controller.NewPaymentController(paymentService, midtransService)
-
 )
 
 func main() {

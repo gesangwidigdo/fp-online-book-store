@@ -12,10 +12,10 @@ type MidtransService interface {
 }
 
 type midtransService struct {
-	client snap.Client
+	client *snap.Client
 }
 
-func NewMidtransService(client snap.Client) MidtransService {
+func NewMidtransService(client *snap.Client) MidtransService {
 	return &midtransService{
 		client: client,
 	}
@@ -25,7 +25,7 @@ func (ms *midtransService) GenerateSnapUrl(paymentReq dto.CreatePaymentRequest) 
 	req := & snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  uuid.New().String(), 
-			GrossAmt: int64(paymentReq.Change),
+			GrossAmt: int64(paymentReq.Amount),
 		}, 
 		CreditCard: &snap.CreditCardDetails{
 			Secure: true,
