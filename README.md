@@ -17,4 +17,4 @@
 
 ### Database
 
-![database](public/database.jpeg)
+![database](public/db_design.png)
