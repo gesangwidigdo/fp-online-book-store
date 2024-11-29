@@ -1,7 +1,29 @@
 package dto
 
 type CreatePaymentRequest struct {
-	Change float64 `json:"change" form:"change" binding:"required"`
+	Amount float64 `json:"amount" form:"amount" binding:"required"`
+	TransactionID string `json:"transaction_id" form:"transaction_id" binding:"required"`
+}
+
+type PaymentNotificationResponse struct {
+	Transaction_time string `json:"transaction_time"`
+	Transaction_status string `json:"transaction_status"`
+	Transaction_id string `json:"transaction_id"`
+	Status_message string `json:"status_message"`
+	Status_code string `json:"status_code"`
+	Signature_key string `json:"signature_key"`
+	Settlement_time string `json:"settlement_time"`
+	Payment_type string `json:"payment_type"`
+	Order_id string `json:"order_id"`
+	Merchant_id string `json:"merchant_id"`
+	Gross_amount string `json:"gross_amount"`
+	Fraud_status string `json:"fraud_status"`
+	Currency string `json:"currency"`
+}
+
+type PaymentPayload struct {
+	Gross_amount int64 `json:"gross_amount"`
+	Order_id string `json:"order_id"`
 }
 
 const (
