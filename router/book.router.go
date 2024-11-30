@@ -10,9 +10,9 @@ func Book(r *gin.Engine, bc controller.BookController) {
 	routes := r.Group("/api/book")
 	{
 		routes.GET("/", bc.GetAll)
-		routes.POST("/", middleware.RequireAuth, bc.Create)
+		routes.POST("/", middleware.RequireAuth("admin"), bc.Create)
 		routes.GET("/:slug", bc.GetBySlug)
-		routes.PUT("/:id", middleware.RequireAuth, bc.Update)
-		routes.DELETE("/:id", middleware.RequireAuth, bc.Delete)
+		routes.PUT("/:id", middleware.RequireAuth("admin"), bc.Update)
+		routes.DELETE("/:id", middleware.RequireAuth("admin"), bc.Delete)
 	}
 }
