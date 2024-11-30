@@ -11,5 +11,6 @@ func Transaction(r *gin.Engine, tc controller.TransactionController) {
 	{
 		routes.POST("/", middleware.RequireAuth, tc.Create)
 		routes.GET("/status", middleware.RequireAuth, tc.GetTransactionStatus)
+		routes.GET("/list", middleware.RequireAuth, tc.GetAllTransactionByUserLogin)
 	}
 }

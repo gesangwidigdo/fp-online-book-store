@@ -8,6 +8,7 @@ import (
 type TransactionService interface {
 	CreateTransaction(id string) (dto.TransactionCreateRes, error)
 	GetTransactionStatus(id string) (dto.TransactionStatusRes, error)
+	GetAllTransactionByUserLogin(id string) (dto.TransactionListRes, error)
 }
 
 type transactionService struct {
@@ -21,6 +22,15 @@ func NewTransactionService(tr repository.TransactionRepository) TransactionServi
 }
 
 func (ts *transactionService) CreateTransaction(id string) (dto.TransactionCreateRes, error) {
+	availTrans, err := ts.transactionRepo.FindTransactionStatusByUserID(id, "draft")
+	if err != nil {
+		return dto.TransactionCreateRes{}, err
+	}
+
+	if availTrans.Status == "draft" {
+		return dto.TransactionCreateRes{}, dto.ERR_TRANSACTION_ALREADY_EXISTS
+	}
+
 	trans, err := ts.transactionRepo.Create(id)
 
 	if err != nil {
@@ -34,7 +44,7 @@ func (ts *transactionService) CreateTransaction(id string) (dto.TransactionCreat
 }
 
 func (ts *transactionService) GetTransactionStatus(id string) (dto.TransactionStatusRes, error) {
-	trans, err := ts.transactionRepo.FindTransactionStatusByUserID(id)
+	trans, err := ts.transactionRepo.FindTransactionStatusByUserID(id, "draft")
 	if err != nil {
 		return dto.TransactionStatusRes{}, err
 	}
@@ -44,4 +54,30 @@ func (ts *transactionService) GetTransactionStatus(id string) (dto.TransactionSt
 		CreatedAt: trans.CreatedAt,
 		Status: trans.Status,
 	}, nil
+}
+
+
+func (ts *transactionService) GetAllTransactionByUserLogin(id string) (dto.TransactionListRes, error) {
+	transactions, err := ts.transactionRepo.GetAllTransactionByUserLogin(id)
+	if err != nil {
+		return dto.TransactionListRes{}, err
+	}
+
+	var transactionStatusRes []dto.TransactionStatusRes
+	for _, t := range transactions {
+		transactionStatusRes = append(transactionStatusRes, dto.TransactionStatusRes{
+			GrandTotal: t.GrandTotal,
+			CreatedAt: t.CreatedAt,
+			Status: t.Status,
+		})
+	}
+
+	return dto.TransactionListRes{
+		Transactions: transactionStatusRes,
+	}, nil
+}
+
+
+func (ts *transactionService) UpdateTransaction() error{
+	return nil
 }
