@@ -7,8 +7,18 @@ import (
 	"os"
 
 	"github.com/Djuanzz/go-template/model"
+	"github.com/Djuanzz/go-template/utils"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
+
+func MustHash(password string) string {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+	return string(hash)
+}
 
 func UserSeeder(db *gorm.DB) error {
 	jsonFile, err := os.Open("./migration/json/user.seed.json")
@@ -38,6 +48,14 @@ func UserSeeder(db *gorm.DB) error {
 		}
 
 		isData := db.Find(&user, "email = ? OR name = ?", data.Email, data.Name).RowsAffected
+
+		password, err := utils.HashPassword(data.Password)
+		if err != nil {
+			return err
+		}
+		
+		data.Password = password
+		
 		if isData == 0 {
 			if err := db.Create(&data).Error; err != nil {
 				return err

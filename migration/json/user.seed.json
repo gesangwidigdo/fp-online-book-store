@@ -16,5 +16,14 @@
     "gender": "female",
     "phone_number": "08987654321",
     "birth_date": "02-02-2002"
+  },
+  {
+    "name": "warnabiru",
+    "email": "warnabiru@gmail.com",
+    "password": "warnabiru123",
+    "address": "semarang, jawa tengah",
+    "gender": "female",
+    "phone_number": "08567891234",
+    "birth_date": "03-03-2003"
   }
 ]
