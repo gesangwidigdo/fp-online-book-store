@@ -31,33 +31,33 @@ func NewBookTransactionService(btr repository.BookTransactionRepository, tr repo
 func (bts *bookTransactionService) Create(userId string, btReq dto.BookTransactionReq) (dto.BookTransactionRes, error) {
 	// TRANSACTION
 	// Check current transaction status by user id
-	// var transaction model.Transaction
-	// transaction, err := bts.transactionRepo.FindTransactionStatusByUserID(userId)
-	// if err != nil {
-	// 	// if record not found, create it
-	// 	if err.Error() == "record not found" {
-	// 		newTransaction, err := bts.transactionRepo.Create(userId)
-	// 		if err != nil {
-	// 			return dto.BookTransactionRes{}, err
-	// 		}
-	// 		transaction = newTransaction
-	// 	} else {
-	// 		return dto.BookTransactionRes{}, err
-	// 	}
-	// }
+	var transaction model.Transaction
+	transaction, err := bts.transactionRepo.FindTransactionStatusByUserID(userId)
+	if err != nil {
+		// if record not found, create it
+		if err.Error() == "record not found" {
+			newTransaction, err := bts.transactionRepo.Create(userId)
+			if err != nil {
+				return dto.BookTransactionRes{}, err
+			}
+			transaction = newTransaction
+		} else {
+			return dto.BookTransactionRes{}, err
+		}
+	}
 
 	var transaction_id uuid.UUID
 	// If status is false, use current transaction id as transaction_id
-	// if !transaction.Status {
-	// 	transaction_id = transaction.ID
-	// } else {
-	// 	// If status is true, create new transaction
-	// 	newTransaction, err := bts.transactionRepo.Create(userId)
-	// 	if err != nil {
-	// 		return dto.BookTransactionRes{}, err
-	// 	}
-	// 	transaction_id = newTransaction.ID
-	// }
+	if !transaction.Status {
+		transaction_id = transaction.ID
+	} else {
+		// If status is true, create new transaction
+		newTransaction, err := bts.transactionRepo.Create(userId)
+		if err != nil {
+			return dto.BookTransactionRes{}, err
+		}
+		transaction_id = newTransaction.ID
+	}
 
 	// BOOK
 	// Get book data by id
