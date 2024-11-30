@@ -1,0 +1,20 @@
+[
+  {
+    "name": "warnahijau",
+    "email": "warnahijau@gmail.com",
+    "password": "warnahijau123",
+    "address": "surabaya, jawa timur",
+    "gender": "male",
+    "phone_number": "08123456789",
+    "birth_date": "01-01-2001"
+  },
+  {
+    "name": "warnakuning",
+    "email": "warnakuning@gmail.com",
+    "password": "warnakuning123",
+    "address": "surakarta, jawa tengah",
+    "gender": "female",
+    "phone_number": "08987654321",
+    "birth_date": "02-02-2002"
+  }
+]
