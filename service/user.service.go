@@ -86,7 +86,7 @@ func (us *userService) Login(userReq dto.UserLoginReq) (dto.UserLoginRes, error)
 	}
 
 	// --- KALO BENER GENERATE TOKEN
-	token, err := utils.GenerateToken(isUser.ID)
+	token, err := utils.GenerateToken(isUser.ID, isUser.UserType)
 	if err != nil {
 		return dto.UserLoginRes{}, err
 	}
