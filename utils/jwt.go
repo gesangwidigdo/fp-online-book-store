@@ -8,10 +8,10 @@ import (
 	"github.com/google/uuid"
 )
 
-func GenerateToken(userId uuid.UUID, role string) (string, error) {
+func GenerateToken(userId uuid.UUID, userType string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": userId,
-		"role": role,
+		"role": userType,
 		"exp": jwt.NewNumericDate(time.Now().Add(time.Minute * 120)),
 	})
 

@@ -55,6 +55,4 @@ var (
 	ERR_TOKEN_EXP_TIME          = errors.New("Invalid token expiration time")
 	ERR_TOKEN_USER_ID           = errors.New("Invalid user ID in token")
 	ERR_INVALID_TOKEN           = errors.New("Invalid token")
-	ERR_TOKEN_ROLE              = errors.New("Invalid role in token")
-	ERR_UNAUTHORIZED_ACCESS     = errors.New("Unauthorized access")
 )
