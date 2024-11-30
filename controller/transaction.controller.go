@@ -12,6 +12,7 @@ import (
 type TransactionController interface {
 	Create(ctx *gin.Context)
 	GetTransactionStatus(ctx *gin.Context)
+	GetAllTransactionByUserLogin(ctx *gin.Context)
 }
 
 type transactionController struct {
@@ -61,6 +62,26 @@ func (tc *transactionController) GetTransactionStatus(ctx *gin.Context) {
 	}
 
 	response, err := tc.transactionService.GetTransactionStatus(userId.(string))
+
+	if err != nil {
+		res := utils.ResponseFailed(dto.MSG_TRANSACTION_STATUS_FAILED, err.Error())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	res := utils.ResponseSuccess(dto.MSG_TRANSACTION_STATUS_SUCCESS, response)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (tc *transactionController) GetAllTransactionByUserLogin(ctx *gin.Context) {
+	userId, exists := ctx.Get("user")
+	if !exists {
+		res := utils.ResponseFailed(dto.MSG_USER_NOT_FOUND, nil)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	response, err := tc.transactionService.GetAllTransactionByUserLogin(userId.(string))
 
 	if err != nil {
 		res := utils.ResponseFailed(dto.MSG_TRANSACTION_STATUS_FAILED, err.Error())
