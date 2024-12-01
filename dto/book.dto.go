@@ -24,11 +24,12 @@ type BookCreateRes struct {
 }
 
 type BookListRes struct {
-	ID      uuid.UUID `json:"id"`
-	Title   string    `json:"title"`
-	Author  string    `json:"author"`
-	Summary string    `json:"summary"`
-	Price   float64   `json:"price"`
+	ID        uuid.UUID `json:"id"`
+	BookImage string    `json:"book_image"`
+	Title     string    `json:"title"`
+	Author    string    `json:"author"`
+	Summary   string    `json:"summary"`
+	Price     float64   `json:"price"`
 }
 
 type BookDetailRes struct {

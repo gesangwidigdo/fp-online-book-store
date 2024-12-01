@@ -32,7 +32,7 @@ func (bts *bookTransactionService) Create(userId string, btReq dto.BookTransacti
 	// TRANSACTION
 	// Check current transaction status by user id
 	var transaction model.Transaction
-	transaction, err := bts.transactionRepo.FindTransactionStatusByUserID(userId)
+	transaction, err := bts.transactionRepo.FindTransactionStatusByUserID(userId, "draft")
 	if err != nil {
 		// if record not found, create it
 		if err.Error() == "record not found" {
@@ -48,7 +48,7 @@ func (bts *bookTransactionService) Create(userId string, btReq dto.BookTransacti
 
 	var transaction_id uuid.UUID
 	// If status is false, use current transaction id as transaction_id
-	if !transaction.Status {
+	if transaction.Status == "draft" {
 		transaction_id = transaction.ID
 	} else {
 		// If status is true, create new transaction

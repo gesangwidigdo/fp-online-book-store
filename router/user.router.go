@@ -12,6 +12,6 @@ func User(r *gin.Engine, uc controller.UserController) {
 		routes.GET("/", uc.GetAll)
 		routes.POST("/register", uc.Register)
 		routes.POST("/login", uc.Login)
-		routes.GET("/me", middleware.RequireAuth("user, admin"), uc.Me)
+		routes.GET("/me", middleware.RequireAuth, uc.Me)
 	}
 }

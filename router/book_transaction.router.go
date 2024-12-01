@@ -9,9 +9,9 @@ import (
 func BookTransaction(r *gin.Engine, btc controller.BookTransactionController) {
 	routes := r.Group("/api/book_transaction")
 	{
-		routes.POST("/", middleware.RequireAuth("user"), btc.Create)
-		routes.GET("/:transaction_id", middleware.RequireAuth("user"), btc.GetByTransactionID)
-		routes.PUT("/:transaction_id", middleware.RequireAuth("user"), btc.UpdateQuantity)
-		routes.DELETE("/:transaction_id", middleware.RequireAuth("user"), btc.Delete)
+		routes.POST("/", middleware.RequireAuth, middleware.RoleAllow("user"), btc.Create)
+		routes.GET("/:transaction_id", middleware.RequireAuth, middleware.RoleAllow("user"), btc.GetByTransactionID)
+		routes.PUT("/:transaction_id", middleware.RequireAuth, middleware.RoleAllow("user"), btc.UpdateQuantity)
+		routes.DELETE("/:transaction_id", middleware.RequireAuth, middleware.RoleAllow("user"), btc.Delete)
 	}
 }

@@ -76,11 +76,12 @@ func (bs *bookService) GetAll() ([]dto.BookListRes, error) {
 	var bookList []dto.BookListRes
 	for _, book := range books {
 		bookList = append(bookList, dto.BookListRes{
-			ID:      book.ID,
-			Title:   book.Title,
-			Author:  book.Author,
-			Summary: book.Summary,
-			Price:   book.Price,
+			ID:        book.ID,
+			BookImage: book.BookImage,
+			Title:     book.Title,
+			Author:    book.Author,
+			Summary:   book.Summary,
+			Price:     book.Price,
 		})
 	}
 
