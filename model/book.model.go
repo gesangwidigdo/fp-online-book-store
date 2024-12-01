@@ -14,5 +14,5 @@ type Book struct {
 	Price           float64       `gorm:"type:decimal(10,2);default:0;not null" json:"price" form:"price" binding:"required"`
 
 	// Relationship
-	Transactions    []Transaction `gorm:"many2many:book_transactions;"`
+	BookTransaction    []BookTransaction `gorm:"foreignKey:BookID" json:"book_transactions"`
 }

@@ -12,6 +12,7 @@ type TransactionRepository interface {
 	Create(id string) (model.Transaction, error)
 	FindTransactionStatusByUserID(id string, status string) (model.Transaction, error)
 	GetAllTransactionByUserLogin(id string) ([]model.Transaction, error)
+	GetTransactionWithBooksByID(id string) (model.Transaction, error)
 }
 
 type transactionRepository struct {
@@ -82,4 +83,14 @@ func (tr *transactionRepository) GetAllTransactionByUserLogin(id string) ([]mode
 	}
 
 	return transactions, nil
+}
+
+func (tr *transactionRepository) GetTransactionWithBooksByID(id string) (model.Transaction, error) {
+	var transaction model.Transaction
+
+	if err := tr.DB.Preload("BookTransaction.Book").Where("id = ?", id).First(&transaction).Error; err != nil {
+		return transaction, err
+	}
+
+	return transaction, nil
 }

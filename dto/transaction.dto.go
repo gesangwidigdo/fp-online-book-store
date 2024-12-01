@@ -6,26 +6,30 @@ import (
 )
 
 type TransactionReq struct {
-
 }
 
 type TransactionCreateRequest struct {
-
 }
 
 type TransactionCreateRes struct {
-	GrandTotal float64 `json:"grand_total"`
-	CreatedAt time.Time `json:"created_at"`
+	GrandTotal float64   `json:"grand_total"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 type TransactionStatusRes struct {
-	GrandTotal float64 `json:"grand_total"`
-	CreatedAt time.Time `json:"created_at"`
-	Status string `json:"status"`
+	GrandTotal float64   `json:"grand_total"`
+	CreatedAt  time.Time `json:"created_at"`
+	Status     string    `json:"status"`
 }
 
 type TransactionListRes struct {
 	Transactions []TransactionStatusRes `json:"transactions"`
+}
+
+type TransactionWithBooksRes struct {
+	ID         string                 `json:"id"`
+	GrandTotal float64                `json:"grand_total"`
+	BookList   []BookToTransactionRes `json:"books"`
 }
 
 const (
