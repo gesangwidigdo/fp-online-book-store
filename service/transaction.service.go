@@ -22,10 +22,7 @@ func NewTransactionService(tr repository.TransactionRepository) TransactionServi
 }
 
 func (ts *transactionService) CreateTransaction(id string) (dto.TransactionCreateRes, error) {
-	availTrans, err := ts.transactionRepo.FindTransactionStatusByUserID(id, "draft")
-	if err != nil {
-		return dto.TransactionCreateRes{}, err
-	}
+	availTrans, _ := ts.transactionRepo.FindTransactionStatusByUserID(id, "draft")
 
 	if availTrans.Status == "draft" {
 		return dto.TransactionCreateRes{}, dto.ERR_TRANSACTION_ALREADY_EXISTS

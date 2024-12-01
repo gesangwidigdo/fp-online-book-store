@@ -40,7 +40,8 @@ func (tr *transactionRepository) FindTransactionStatusByUserID(id string, status
 	var transaction model.Transaction
 	userId, _ := uuid.Parse(id)
 
-	if err := tr.DB.Where("user_id = ? AND status = ?", userId, status).First(&transaction).Error; err != nil {
+	if err := tr.DB.Where("user_id = ? AND status = ?", userId, status).
+		Find(&transaction).Error; err != nil {
 		return model.Transaction{}, err
 	}
 
@@ -77,8 +78,10 @@ func (tr *transactionRepository) GetAllTransactionByUserLogin(id string) ([]mode
 		return nil, err
 	}
 
-	if err := tr.DB.Where("user_id = ?", userId).Find(&transactions).Error; err != nil {
-		return nil, err
+	if err := tr.DB.Where("user_id = ?", userId).
+		Order("created_at desc").
+		Find(&transactions).Error; err != nil {
+			return nil, err
 	}
 
 	return transactions, nil
