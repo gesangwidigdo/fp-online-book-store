@@ -12,6 +12,7 @@ func Transaction(r *gin.Engine, tc controller.TransactionController) {
 		routes.GET("/status", tc.GetTransactionStatus)
 		routes.GET("/list", tc.GetAllTransactionByUserLogin)
 		routes.GET("/:id", tc.GetTransactionWithBooksByID)
+		routes.PUT("/total/:id", tc.CalculateGrandTotal)
 		// routes.POST("/", middleware.RequireAuth, tc.Create)
 		// routes.GET("/status", middleware.RequireAuth, tc.GetTransactionStatus)
 		// routes.GET("/list", middleware.RequireAuth, tc.GetAllTransactionByUserLogin)
