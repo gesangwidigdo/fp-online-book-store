@@ -32,6 +32,11 @@ type TransactionWithBooksRes struct {
 	BookList   []BookToTransactionRes `json:"books"`
 }
 
+type TransactionCalculateGrandTotalRes struct {
+	ID         string  `json:"id"`
+	GrandTotal float64 `json:"grand_total"`
+}
+
 const (
 	MSG_TRANSACTION_CREATE_SUCCESS = "transaction created successfully"
 	MSG_TRANSACTION_UPDATE_SUCCESS = "transaction updated successfully"

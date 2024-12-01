@@ -13,6 +13,7 @@ type TransactionRepository interface {
 	FindTransactionStatusByUserID(id string, status string) (model.Transaction, error)
 	GetAllTransactionByUserLogin(id string) ([]model.Transaction, error)
 	GetTransactionWithBooksByID(id string) (model.Transaction, error)
+	UpdateTransaction(id string, amount float64) (model.Transaction, error)
 }
 
 type transactionRepository struct {
@@ -50,12 +51,11 @@ func (tr *transactionRepository) FindTransactionStatusByUserID(id string, status
 
 func (tr *transactionRepository) UpdateTransaction(id string, amount float64) (model.Transaction, error) {
 	var transaction model.Transaction
-	userId, _ := uuid.Parse(id)
 
-    // Update grand_total di tabel transaction berdasarkan user_id
-    if err := tr.DB.Model(&transaction).Where("user_id = ?", userId).Update("grand_total", amount).Error; err != nil {
-        return transaction, fmt.Errorf("failed to update transaction: %v", err)
-    }
+	// Update grand_total di tabel transaction berdasarkan user_id
+	if err := tr.DB.Model(&transaction).Where("id = ?", id).Update("grand_total", amount).Error; err != nil {
+			return transaction, fmt.Errorf("failed to update transaction: %v", err)
+	}
 
 
 	return transaction, nil

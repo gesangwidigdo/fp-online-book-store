@@ -10,6 +10,7 @@ type TransactionService interface {
 	GetTransactionStatus(id string) (dto.TransactionStatusRes, error)
 	GetAllTransactionByUserLogin(id string) (dto.TransactionListRes, error)
 	GetTransactionWithBooksByID(id string) (dto.TransactionWithBooksRes, error)
+	CalculateGrandTotal(id string) (dto.TransactionCalculateGrandTotalRes, error)
 }
 
 type transactionService struct {
@@ -40,7 +41,7 @@ func (ts *transactionService) CreateTransaction(id string) (dto.TransactionCreat
 
 	return dto.TransactionCreateRes{
 		GrandTotal: trans.GrandTotal,
-		CreatedAt: trans.CreatedAt,
+		CreatedAt:  trans.CreatedAt,
 	}, nil
 }
 
@@ -52,11 +53,10 @@ func (ts *transactionService) GetTransactionStatus(id string) (dto.TransactionSt
 
 	return dto.TransactionStatusRes{
 		GrandTotal: trans.GrandTotal,
-		CreatedAt: trans.CreatedAt,
-		Status: trans.Status,
+		CreatedAt:  trans.CreatedAt,
+		Status:     trans.Status,
 	}, nil
 }
-
 
 func (ts *transactionService) GetAllTransactionByUserLogin(id string) (dto.TransactionListRes, error) {
 	transactions, err := ts.transactionRepo.GetAllTransactionByUserLogin(id)
@@ -68,8 +68,8 @@ func (ts *transactionService) GetAllTransactionByUserLogin(id string) (dto.Trans
 	for _, t := range transactions {
 		transactionStatusRes = append(transactionStatusRes, dto.TransactionStatusRes{
 			GrandTotal: t.GrandTotal,
-			CreatedAt: t.CreatedAt,
-			Status: t.Status,
+			CreatedAt:  t.CreatedAt,
+			Status:     t.Status,
 		})
 	}
 
@@ -78,8 +78,7 @@ func (ts *transactionService) GetAllTransactionByUserLogin(id string) (dto.Trans
 	}, nil
 }
 
-
-func (ts *transactionService) UpdateTransaction() error{
+func (ts *transactionService) UpdateTransaction() error {
 	return nil
 }
 
@@ -90,21 +89,43 @@ func (ts *transactionService) GetTransactionWithBooksByID(id string) (dto.Transa
 	}
 
 	return dto.TransactionWithBooksRes{
-		ID: transactions.ID.String(),
+		ID:         transactions.ID.String(),
 		GrandTotal: transactions.GrandTotal,
 		BookList: func() []dto.BookToTransactionRes {
 			var bookList []dto.BookToTransactionRes
 			for _, b := range transactions.BookTransaction {
 				bookList = append(bookList, dto.BookToTransactionRes{
-					ID: b.BookID,
-					Title: b.Book.Title,
+					ID:        b.BookID,
+					Title:     b.Book.Title,
 					BookImage: b.Book.BookImage,
-					Price: b.Book.Price,
-					Quantity: b.Quantity,
-					Total: b.Total,
+					Price:     b.Book.Price,
+					Quantity:  b.Quantity,
+					Total:     b.Total,
 				})
 			}
 			return bookList
 		}(),
+	}, nil
+}
+
+func (ts *transactionService) CalculateGrandTotal(id string) (dto.TransactionCalculateGrandTotalRes, error) {
+	transactions, err := ts.transactionRepo.GetTransactionWithBooksByID(id)
+	if err != nil {
+		return dto.TransactionCalculateGrandTotalRes{}, err
+	}
+
+	var grandTotal float64
+	for _, bt := range transactions.BookTransaction {
+		grandTotal += bt.Total
+	}
+
+	updatedGrandTotal, err := ts.transactionRepo.UpdateTransaction(id, grandTotal)
+	if err != nil {
+		return dto.TransactionCalculateGrandTotalRes{}, err
+	}
+
+	return dto.TransactionCalculateGrandTotalRes{
+		ID:         transactions.ID.String(),
+		GrandTotal: updatedGrandTotal.GrandTotal,
 	}, nil
 }
