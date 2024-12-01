@@ -7,6 +7,7 @@ import (
 	"github.com/Djuanzz/go-template/config"
 	"github.com/Djuanzz/go-template/controller"
 	"github.com/Djuanzz/go-template/middleware"
+	"github.com/Djuanzz/go-template/migration"
 	"github.com/Djuanzz/go-template/model"
 	"github.com/Djuanzz/go-template/repository"
 	"github.com/Djuanzz/go-template/router"
@@ -60,6 +61,10 @@ func main() {
 
 	if err := model.Migrate(db); err != nil {
 		panic("Failed to migrate database")
+	}
+
+	if err := migration.Seeder(db); err != nil {
+		panic(err.Error())
 	}
 
 	port := os.Getenv("PORT")
