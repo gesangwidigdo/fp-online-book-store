@@ -9,6 +9,7 @@ type TransactionService interface {
 	CreateTransaction(id string) (dto.TransactionCreateRes, error)
 	GetTransactionStatus(id string) (dto.TransactionStatusRes, error)
 	GetAllTransactionByUserLogin(id string) (dto.TransactionListRes, error)
+	GetTransactionWithBooksByID(id string) (dto.TransactionWithBooksRes, error)
 }
 
 type transactionService struct {
@@ -80,4 +81,30 @@ func (ts *transactionService) GetAllTransactionByUserLogin(id string) (dto.Trans
 
 func (ts *transactionService) UpdateTransaction() error{
 	return nil
+}
+
+func (ts *transactionService) GetTransactionWithBooksByID(id string) (dto.TransactionWithBooksRes, error) {
+	transactions, err := ts.transactionRepo.GetTransactionWithBooksByID(id)
+	if err != nil {
+		return dto.TransactionWithBooksRes{}, err
+	}
+
+	return dto.TransactionWithBooksRes{
+		ID: transactions.ID.String(),
+		GrandTotal: transactions.GrandTotal,
+		BookList: func() []dto.BookToTransactionRes {
+			var bookList []dto.BookToTransactionRes
+			for _, b := range transactions.BookTransaction {
+				bookList = append(bookList, dto.BookToTransactionRes{
+					ID: b.BookID,
+					Title: b.Book.Title,
+					BookImage: b.Book.BookImage,
+					Price: b.Book.Price,
+					Quantity: b.Quantity,
+					Total: b.Total,
+				})
+			}
+			return bookList
+		}(),
+	}, nil
 }

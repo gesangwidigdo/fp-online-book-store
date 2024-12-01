@@ -54,6 +54,15 @@ type BookUpdateRes struct {
 	Price           float64   `json:"price"`
 }
 
+type BookToTransactionRes struct {
+	ID        uuid.UUID `json:"id"`
+	Title     string    `json:"title"`
+	BookImage string    `json:"book_image"`
+	Price     float64   `json:"price"`
+	Quantity  uint64    `json:"quantity"`
+	Total     float64   `json:"total"`
+}
+
 const (
 	MSG_BOOK_CREATE_SUCCESS      = "book created successfully"
 	MSG_BOOK_UPDATE_SUCCESS      = "book updated successfully"
