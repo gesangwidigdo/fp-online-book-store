@@ -27,6 +27,7 @@ type BookListRes struct {
 	ID        uuid.UUID `json:"id"`
 	BookImage string    `json:"book_image"`
 	Title     string    `json:"title"`
+	Slug      string    `json:"slug"`
 	Author    string    `json:"author"`
 	Summary   string    `json:"summary"`
 	Price     float64   `json:"price"`
