@@ -6,6 +6,7 @@ import {
   Search,
   Settings,
   ShoppingCart,
+  User,
 } from "lucide-react";
 
 import {
@@ -48,6 +49,11 @@ const items = [
     url: "/settings",
     icon: Settings,
   },
+  {
+    title: "User",
+    url: "/login",
+    icon: User,
+  }
 ];
 
 export function AppSidebar() {
