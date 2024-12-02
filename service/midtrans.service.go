@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/Djuanzz/go-template/dto"
-	"github.com/google/uuid"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
 )
@@ -24,7 +23,7 @@ func NewMidtransService(client *snap.Client) MidtransService {
 func (ms *midtransService) GenerateSnapUrl(paymentReq dto.CreatePaymentRequest) (string, error) {
 	req := & snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
-			OrderID:  uuid.New().String(), 
+			OrderID:  paymentReq.TransactionID,
 			GrossAmt: int64(paymentReq.Amount),
 		}, 
 		CreditCard: &snap.CreditCardDetails{

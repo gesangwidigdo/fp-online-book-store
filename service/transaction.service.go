@@ -24,10 +24,7 @@ func NewTransactionService(tr repository.TransactionRepository) TransactionServi
 }
 
 func (ts *transactionService) CreateTransaction(id string) (dto.TransactionCreateRes, error) {
-	availTrans, err := ts.transactionRepo.FindTransactionStatusByUserID(id, "draft")
-	if err != nil {
-		return dto.TransactionCreateRes{}, err
-	}
+	availTrans, _ := ts.transactionRepo.FindTransactionStatusByUserID(id, "draft")
 
 	if availTrans.Status == "draft" {
 		return dto.TransactionCreateRes{}, dto.ERR_TRANSACTION_ALREADY_EXISTS
@@ -52,6 +49,7 @@ func (ts *transactionService) GetTransactionStatus(id string) (dto.TransactionSt
 	}
 
 	return dto.TransactionStatusRes{
+		TransId: trans.ID.String(),
 		GrandTotal: trans.GrandTotal,
 		CreatedAt:  trans.CreatedAt,
 		Status:     trans.Status,
@@ -67,6 +65,7 @@ func (ts *transactionService) GetAllTransactionByUserLogin(id string) (dto.Trans
 	var transactionStatusRes []dto.TransactionStatusRes
 	for _, t := range transactions {
 		transactionStatusRes = append(transactionStatusRes, dto.TransactionStatusRes{
+			TransId: t.ID.String(),
 			GrandTotal: t.GrandTotal,
 			CreatedAt:  t.CreatedAt,
 			Status:     t.Status,

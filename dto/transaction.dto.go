@@ -17,9 +17,10 @@ type TransactionCreateRes struct {
 }
 
 type TransactionStatusRes struct {
-	GrandTotal float64   `json:"grand_total"`
-	CreatedAt  time.Time `json:"created_at"`
-	Status     string    `json:"status"`
+	TransId string `json:"id"`
+	GrandTotal float64 `json:"grand_total"`
+	CreatedAt time.Time `json:"created_at"`
+	Status string `json:"status"`
 }
 
 type TransactionListRes struct {
