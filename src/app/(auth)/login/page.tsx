@@ -13,6 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z
@@ -30,31 +32,39 @@ export default function LoginPage() {
       password: "",
     },
   });
+  const router = useRouter();
 
-  const checkMe = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/api/user/me", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
+  // useEffect untuk mengecek apakah user sudah login atau belum
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/user/me", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to get me");
+        if (!response.ok) {
+          throw new Error("Failed to get user data");
+        }
+
+        const data = await response.json();
+        if (data) {
+          // Jika berhasil mendapatkan data user, arahkan ke /home
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error getting user data:", error);
       }
+    };
 
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error during login:", error);
-    }
-  };
+    checkUser();
+  }, [router]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      console.log(values);
       const response = await fetch("http://localhost:5000/api/user/login", {
         method: "POST",
         headers: {
@@ -73,6 +83,9 @@ export default function LoginPage() {
 
       const data = await response.json();
       console.log(data);
+
+      // Setelah berhasil login, arahkan ke /home
+      router.push("/home");
     } catch (error) {
       console.error("Error during login:", error);
     }
@@ -122,13 +135,8 @@ export default function LoginPage() {
 
           {/* Submit Button */}
           <Button type="submit">Login</Button>
-          <Button type="button" onClick={checkMe}>
-            {" "}
-            Me{" "}
-          </Button>
         </form>
       </Form>
     </div>
   );
 }
-

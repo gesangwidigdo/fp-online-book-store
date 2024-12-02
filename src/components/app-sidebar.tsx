@@ -1,10 +1,12 @@
 import {
+  BadgeDollarSign,
   Calendar,
   Home,
   Inbox,
   Search,
   Settings,
   ShoppingCart,
+  User,
 } from "lucide-react";
 
 import {
@@ -18,6 +20,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { title } from "process";
 
 // Menu items.
 const items = [
@@ -37,10 +40,20 @@ const items = [
     icon: Search,
   },
   {
+    title: "Pembelian Saya",
+    url: "/pembelian",
+    icon: BadgeDollarSign,
+  },
+  {
     title: "Settings",
     url: "/settings",
     icon: Settings,
   },
+  {
+    title: "User",
+    url: "/login",
+    icon: User,
+  }
 ];
 
 export function AppSidebar() {
