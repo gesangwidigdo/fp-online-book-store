@@ -27,6 +27,7 @@ type BookListRes struct {
 	ID        uuid.UUID `json:"id"`
 	BookImage string    `json:"book_image"`
 	Title     string    `json:"title"`
+	Slug      string    `json:"slug"`
 	Author    string    `json:"author"`
 	Summary   string    `json:"summary"`
 	Price     float64   `json:"price"`
@@ -52,6 +53,15 @@ type BookUpdateRes struct {
 	BookImage       string    `json:"book_image"`
 	PublicationYear uint64    `json:"publication_year"`
 	Price           float64   `json:"price"`
+}
+
+type BookToTransactionRes struct {
+	ID        uuid.UUID `json:"id"`
+	Title     string    `json:"title"`
+	BookImage string    `json:"book_image"`
+	Price     float64   `json:"price"`
+	Quantity  uint64    `json:"quantity"`
+	Total     float64   `json:"total"`
 }
 
 const (
