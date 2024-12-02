@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 interface BookDetail {
+  id: string;
   isbn: string;
   title: string;
   slug: string;
@@ -30,7 +31,7 @@ function formattedPrice(x: number) {
 export default function BookDetail({ params }: { params: Promise<{ slug: string }> }) {
   const [book, setBook] = useState<BookDetail | null>(null);
   const [slug, setSlug] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
   const [subtotal, setSubtotal] = useState<number>(0);
 
   useEffect(() => {
@@ -95,28 +96,28 @@ export default function BookDetail({ params }: { params: Promise<{ slug: string 
 
       {/* add to cart */}
       <div className="w-auto">
-      <Card className="w-[300px]">
-      <CardHeader>
-        <CardTitle>Add to Cart</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="quantity">Quantity</Label>
-              <Input type="number" id="quantity" name="quantity" placeholder="0" min="0" max="10" value={quantity} onChange={handleQuantityChange} />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="subtotal">Subtotal</Label>
-              <Input type="text" id="subtotal" name="subtotal" placeholder={formattedPrice(0)} value={formattedPrice(subtotal)} readOnly />
-            </div>
-          </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button>Add to Cart</Button>
-      </CardFooter>
-    </Card>
+        <Card className="w-[300px]">
+          <CardHeader>
+            <CardTitle>Add to Cart</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form>
+              <div className="grid w-full items-center gap-4">
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="quantity">Quantity</Label>
+                  <Input type="number" id="quantity" name="quantity" placeholder="0" min="1" max="10" value={quantity} onChange={handleQuantityChange} />
+                </div>
+                <div className="flex flex-col space-y-1.5">
+                  <Label htmlFor="subtotal">Subtotal</Label>
+                  <Input type="text" id="subtotal" name="subtotal" placeholder={formattedPrice(0)} value={formattedPrice(subtotal)} readOnly />
+                </div>
+              </div>
+            </form>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button onClick={() => book && addToCart(book.id, quantity)}>Add to Cart</Button>
+          </CardFooter>
+        </Card>
       </div>
     </div>
   );
@@ -165,4 +166,32 @@ export const getStaticParams = async () => {
   return data.map((book: BookDetail) => ({
     slug: book.slug,
   }));
+}
+
+const addToCart = async (id: string, quantity: number) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/book_transaction/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        book_id: id,
+        quantity: quantity,
+      }),
+    });
+  
+    if (!response.ok) {
+      return {
+        notFound: true,
+      }
+    }
+  
+    const cartData = await response.json();
+    return cartData.data;
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    
+  }
 }
