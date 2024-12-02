@@ -6,6 +6,7 @@ interface Book {
   id: string;
   book_image: string;
   title: string;
+  slug: string;
   author: string;
   summary: string;
   price: number;
@@ -50,6 +51,7 @@ export default function HomePage() {
           {books.map((book) => (
             <BookCard 
               key={book.id}
+              slug={book.slug}
               imgUrl={book.book_image}
               title={book.title}
               author={book.author}
