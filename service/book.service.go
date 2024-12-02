@@ -79,6 +79,7 @@ func (bs *bookService) GetAll() ([]dto.BookListRes, error) {
 			ID:        book.ID,
 			BookImage: book.BookImage,
 			Title:     book.Title,
+			Slug:      book.Slug,
 			Author:    book.Author,
 			Summary:   book.Summary,
 			Price:     book.Price,
