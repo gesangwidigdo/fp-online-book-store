@@ -49,6 +49,7 @@ func (ts *transactionService) GetTransactionStatus(id string) (dto.TransactionSt
 	}
 
 	return dto.TransactionStatusRes{
+		TransId: trans.ID.String(),
 		GrandTotal: trans.GrandTotal,
 		CreatedAt:  trans.CreatedAt,
 		Status:     trans.Status,
@@ -64,6 +65,7 @@ func (ts *transactionService) GetAllTransactionByUserLogin(id string) (dto.Trans
 	var transactionStatusRes []dto.TransactionStatusRes
 	for _, t := range transactions {
 		transactionStatusRes = append(transactionStatusRes, dto.TransactionStatusRes{
+			TransId: t.ID.String(),
 			GrandTotal: t.GrandTotal,
 			CreatedAt:  t.CreatedAt,
 			Status:     t.Status,
