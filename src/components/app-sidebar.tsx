@@ -1,4 +1,5 @@
 import {
+  BadgeDollarSign,
   Calendar,
   Home,
   Inbox,
@@ -18,6 +19,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { title } from "process";
 
 // Menu items.
 const items = [
@@ -35,6 +37,11 @@ const items = [
     title: "Search",
     url: "#",
     icon: Search,
+  },
+  {
+    title: "Pembelian Saya",
+    url: "/pembelian",
+    icon: BadgeDollarSign,
   },
   {
     title: "Settings",
