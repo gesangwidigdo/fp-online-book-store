@@ -85,7 +85,7 @@ export default function LoginPage() {
       console.log(data);
 
       // Setelah berhasil login, arahkan ke /home
-      router.push("/home");
+      router.push("/");
     } catch (error) {
       console.error("Error during login:", error);
     }
