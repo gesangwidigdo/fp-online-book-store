@@ -7,7 +7,7 @@ import (
 )
 
 type PaymentRepository interface {
-
+	Create(payment model.Payment) (model.Payment, error)
 }
 
 type paymentRepository struct {

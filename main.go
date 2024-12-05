@@ -30,7 +30,7 @@ var (
 
 	userService service.UserService = service.NewUserService(userRepo)
 	midtransService service.MidtransService = service.NewMidtransService(client)
-	paymentService service.PaymentService = service.NewPaymentService(paymentRepo)
+	paymentService service.PaymentService = service.NewPaymentService(paymentRepo, transRepo)
 	bookService service.BookService = service.NewBookService(bookRepo)
 	transService service.TransactionService = service.NewTransactionService(transRepo)
 	bookTransService service.BookTransactionService = service.NewBookTransactionService(bookTransRepo, transRepo, bookRepo)

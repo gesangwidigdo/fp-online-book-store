@@ -14,6 +14,7 @@ type TransactionRepository interface {
 	GetAllTransactionByUserLogin(id string) ([]model.Transaction, error)
 	GetTransactionWithBooksByID(id string) (model.Transaction, error)
 	UpdateTransaction(id string, amount float64) (model.Transaction, error)
+	UpdateStatus(id string, status string) (model.Transaction, error)
 }
 
 type transactionRepository struct {
@@ -96,4 +97,20 @@ func (tr *transactionRepository) GetTransactionWithBooksByID(id string) (model.T
 	}
 
 	return transaction, nil
+}
+
+func (tr *transactionRepository) UpdateStatus(id string, status string) (model.Transaction, error) {
+    var transaction model.Transaction
+
+    // Cari transaksi berdasarkan ID
+    if err := tr.DB.Where("id = ?", id).First(&transaction).Error; err != nil {
+        return transaction, err
+    }
+
+    // Perbarui status transaksi
+    if err := tr.DB.Model(&transaction).Update("status", status).Error; err != nil {
+        return transaction, err
+    }
+
+    return transaction, nil
 }

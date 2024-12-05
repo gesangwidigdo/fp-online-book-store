@@ -1,8 +1,14 @@
 package dto
 
 type CreatePaymentRequest struct {
-	Amount float64 `json:"amount" form:"amount" binding:"required"`
-	TransactionID string `json:"transaction_id" form:"transaction_id" binding:"required"`
+	Amount int64 `json:"amount" form:"amount" binding:"required"`
+	TransactionID string `json:"transaction_id" form:"transaction_id"`
+}
+
+type CreatePaymentResponse struct {
+	Amount int64 `json:"amount"`
+	Status string `json:"status"`
+	TransactionID string `json:"transaction_id"`
 }
 
 type PaymentNotificationResponse struct {
