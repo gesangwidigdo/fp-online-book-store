@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,7 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
+import { set } from "react-hook-form";
 
 interface Book {
   book_image: string;
@@ -22,7 +23,8 @@ interface Book {
 
 const invoices = [
   {
-    invoice: "INV001",
+    invoice:
+      "http://books.google.com/books/content?id=-reD1g77BfsC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
     paymentStatus: "Paid",
     totalAmount: "$250.00",
     paymentMethod: "Credit Card",
@@ -63,11 +65,12 @@ const invoices = [
     totalAmount: "$300.00",
     paymentMethod: "Credit Card",
   },
-]
+];
 
 const InvoicePage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [id, setId] = useState<string | null>(null);
   const [books, setBooks] = useState<Book[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
 
   useEffect(() => {
     const unwrapParams = async () => {
@@ -79,65 +82,85 @@ const InvoicePage = ({ params }: { params: Promise<{ id: string }> }) => {
     unwrapParams();
   }, [params]);
 
+  useEffect(() => {
+    if (id) {
+      const loadCurTransaction = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5000/api/transaction/${id}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to get books");
+          }
+
+          const booksData = await response.json();
+          console.log(booksData.data);
+          setBooks(booksData.data.books);
+          setTotalAmount(booksData.data.grand_total);
+        } catch (error) {
+          console.error("Error fetching books:", error);
+        }
+      };
+
+      loadCurTransaction();
+    }
+  }, [id]);
   if (!id) {
     return <div>Loading...</div>;
   }
-
-  const loadCurTransaction = async () => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/transaction/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to get books");
-      }
-
-      const booksData = await response.json();
-      console.log(booksData.data);
-      setBooks(booksData.data);
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    }
-  }
-  
-  // useEffect(() => {
-  //   loadCurTransaction();
-  // }, [id]);
 
   return (
     <Table>
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Invoice</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          {/* <TableHead className="w-[100px]">Invoice</TableHead> */}
+          <TableHead className="font-bold text-center">Invoice</TableHead>
+          <TableHead className="font-bold text-center">Title</TableHead>
+          <TableHead className="font-bold text-center">Price</TableHead>
+          <TableHead className="font-bold text-center">Quantity</TableHead>
+          <TableHead className="text-right font-bold">Total Amount</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+        {books.map((book) => (
+          <TableRow key={book.title}>
+            <TableCell className="font-medium flex justify-center">
+              <img
+                src={book.book_image}
+                alt={book.title}
+                className="object-cover flex"
+              />
+            </TableCell>
+            <TableCell className="text-center">{book.title}</TableCell>
+            <TableCell className="text-center">{book.price}</TableCell>
+            <TableCell className="text-center">{book.quantity}</TableCell>
+            <TableCell className="text-right">{book.total}</TableCell>
           </TableRow>
         ))}
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={3}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
+          <TableCell colSpan={4} className="text-center font-extrabold">
+            Total
+          </TableCell>
+          <TableCell className="text-right font-extrabold">
+            {" "}
+            {totalAmount}{" "}
+          </TableCell>
         </TableRow>
       </TableFooter>
     </Table>
-  )
+  );
 };
 
 export default InvoicePage;
+
