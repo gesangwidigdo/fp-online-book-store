@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
+
 
 interface Transaction {
   id: string;
@@ -35,6 +37,7 @@ const PembelianPage = () => {
       }
 
       const data = await response.json();
+      console.log("Transactions data:", data.data.transactions);
       setTransactions(data.data.transactions);
     } catch (error) {
       console.error("Error fetching transactions:", error);
@@ -44,7 +47,7 @@ const PembelianPage = () => {
   // Fungsi untuk menangani pembayaran
   const handlePay = async (transaction_id: string, amount: number) => {
     try {
-      const response = await fetch("http://localhost:5000/api/payment/", {
+      const response = await fetch("http://localhost:5000/api/payment/standard/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -103,7 +106,11 @@ const PembelianPage = () => {
                     Bayar
                   </Button>
                 ) : (
-                  <Button>Lihat</Button>
+                  <Button>
+                    <Link href={"pembelian/invoice/[id]"} as={`/pembelian/invoice/${transaction.id}`}>
+                    Lihat
+                    </Link>
+                    </Button>
                 )}
               </td>
             </tr>
