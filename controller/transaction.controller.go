@@ -15,6 +15,8 @@ type TransactionController interface {
 	GetAllTransactionByUserLogin(ctx *gin.Context)
 	GetTransactionWithBooksByID(ctx *gin.Context)
 	CalculateGrandTotal(ctx *gin.Context)
+	GetTransactionWithBooksByUserLogin(ctx *gin.Context)
+	CalculateGrandTotalByUserLogin(ctx *gin.Context)
 }
 
 type transactionController struct {
@@ -108,6 +110,25 @@ func (tc *transactionController) GetTransactionWithBooksByID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
+func (tc *transactionController) GetTransactionWithBooksByUserLogin(ctx *gin.Context) {
+	userId, exists := ctx.Get("user")
+	if !exists {
+		res := utils.ResponseFailed(dto.MSG_USER_NOT_FOUND, nil)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	response, err := tc.transactionService.GetTransactionWithBooksByUserLogin(userId.(string))
+	if err != nil {
+		res := utils.ResponseFailed(dto.MSG_TRANSACTION_STATUS_FAILED, err.Error())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	res := utils.ResponseSuccess(dto.MSG_TRANSACTION_STATUS_SUCCESS, response)
+	ctx.JSON(http.StatusOK, res)
+}
+
 func (tc *transactionController) CalculateGrandTotal(ctx *gin.Context) {
 	transactionID := ctx.Param("id")
 
@@ -118,6 +139,36 @@ func (tc *transactionController) CalculateGrandTotal(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
 		return
 	}
+
+	res := utils.ResponseSuccess(dto.MSG_TRANSACTION_STATUS_SUCCESS, response)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (tc *transactionController) CalculateGrandTotalByUserLogin(ctx *gin.Context) {
+	userId, exists := ctx.Get("user")
+	if !exists {
+		res := utils.ResponseFailed(dto.MSG_USER_NOT_FOUND, nil)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	response, err := tc.transactionService.CalculateGrandTotalByUserLogin(userId.(string))
+
+	if err != nil {
+		res := utils.ResponseFailed(dto.MSG_TRANSACTION_STATUS_FAILED, err.Error())
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	// transactionID := ctx.Param("id")
+
+	// response, err := tc.transactionService.CalculateGrandTotal(transactionID)
+
+	// if err != nil {
+	// 	res := utils.ResponseFailed(dto.MSG_TRANSACTION_STATUS_FAILED, err.Error())
+	// 	ctx.AbortWithStatusJSON(http.StatusInternalServerError, res)
+	// 	return
+	// }
 
 	res := utils.ResponseSuccess(dto.MSG_TRANSACTION_STATUS_SUCCESS, response)
 	ctx.JSON(http.StatusOK, res)

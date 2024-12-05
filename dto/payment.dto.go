@@ -1,7 +1,7 @@
 package dto
 
 type CreatePaymentRequest struct {
-	Amount int64 `json:"amount" form:"amount" binding:"required"`
+	Amount int64 `json:"amount" form:"amount"`
 	TransactionID string `json:"transaction_id" form:"transaction_id"`
 }
 

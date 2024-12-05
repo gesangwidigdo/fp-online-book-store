@@ -35,10 +35,16 @@ func (ps *paymentService) CreateStandard(paymentReq dto.CreatePaymentRequest, us
 
 	transId, _ := uuid.Parse(trans.ID.String())
 
+	// transactions, err := ps.transactionRepo.GetTransactionWithBooksByID(transIdStr)
+	transaction, err := ps.transRepo.GetTransactionWithBooksByID(transId.String())
+	if err != nil {
+		return dto.CreatePaymentResponse{}, err
+	}
+
 	// --- ANGGEPANE CREATE LGSG SUCCESS
 	payment := model.Payment{
 		TransactionID: transId,
-		Amount: paymentReq.Amount,
+		Amount: int64(transaction.GrandTotal),
 		Status: "success",
 	}
 
