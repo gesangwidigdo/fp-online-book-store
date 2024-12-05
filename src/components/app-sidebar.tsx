@@ -34,21 +34,21 @@ const items = [
     url: "/keranjang",
     icon: ShoppingCart,
   },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
+  // {
+  //   title: "Search",
+  //   url: "#",
+  //   icon: Search,
+  // },
   {
     title: "Pembelian Saya",
     url: "/pembelian",
     icon: BadgeDollarSign,
   },
-  {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings,
-  },
+  // {
+  //   title: "Settings",
+  //   url: "/settings",
+  //   icon: Settings,
+  // },
   {
     title: "User",
     url: "/login",
