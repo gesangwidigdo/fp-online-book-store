@@ -29,7 +29,6 @@ export default function HomePage() {
       }
 
       const booksData = await response.json();
-      console.log(booksData.data);
       setBooks(booksData.data);
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -45,7 +44,7 @@ export default function HomePage() {
   }
 
   return (
-    <div>
+    <>
       <h1>Home Page</h1>
         <div className="flex flex-wrap justify-center">
           {books.map((book) => (
@@ -59,6 +58,6 @@ export default function HomePage() {
             />
           ))}
         </div>
-    </div>
+    </>
   );
 }

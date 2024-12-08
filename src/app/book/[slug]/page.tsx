@@ -11,6 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface BookDetail {
   id: string;
@@ -29,6 +30,7 @@ function formattedPrice(x: number) {
 }
 
 export default function BookDetail({ params }: { params: Promise<{ slug: string }> }) {
+  const router = useRouter();
   const [book, setBook] = useState<BookDetail | null>(null);
   const [slug, setSlug] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
@@ -63,6 +65,37 @@ export default function BookDetail({ params }: { params: Promise<{ slug: string 
 
   if (!book) {
     return <div>Loading...</div>;
+  }
+
+  const AddToCart = async (id: string, quantity: number) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/book_transaction/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          book_id: id,
+          quantity: quantity,
+        }),
+      });
+    
+      if (!response.ok) {
+        if (response.status === 401) {
+          router.push('/login')
+          return
+        }
+        return {
+          notFound: true,
+        }
+      }
+    
+      const cartData = await response.json();
+      return cartData.data;
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
   }
 
   return (
@@ -115,7 +148,7 @@ export default function BookDetail({ params }: { params: Promise<{ slug: string 
             </form>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button onClick={() => book && addToCart(book.id, quantity)}>Add to Cart</Button>
+            <Button onClick={() => book && AddToCart(book.id, quantity)}>Add to Cart</Button>
           </CardFooter>
         </Card>
       </div>
@@ -166,32 +199,4 @@ export const getStaticParams = async () => {
   return data.map((book: BookDetail) => ({
     slug: book.slug,
   }));
-}
-
-const addToCart = async (id: string, quantity: number) => {
-  try {
-    const response = await fetch(`http://localhost:5000/api/book_transaction/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        book_id: id,
-        quantity: quantity,
-      }),
-    });
-  
-    if (!response.ok) {
-      return {
-        notFound: true,
-      }
-    }
-  
-    const cartData = await response.json();
-    return cartData.data;
-  } catch (error) {
-    console.error("Error adding to cart:", error);
-    
-  }
 }
