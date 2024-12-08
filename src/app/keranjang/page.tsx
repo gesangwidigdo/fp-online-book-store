@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { TransactionBookList } from "@/components/transactionBookList";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 interface Books {
   id: string,
@@ -24,6 +25,7 @@ function formattedPrice(x: number) {
 }
 
 export default function KeranjangPage() {
+  const router = useRouter();
   const [transactions, setTransactions] = useState<TransactionBooks | null>(null);
   const loadTransactions = async () => {
     try {
@@ -46,6 +48,29 @@ export default function KeranjangPage() {
       console.error("Error fetching transactions:", error);
     }
   };
+
+  const calculateGrandTotal = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/api/transaction/total", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to calculate grand total");
+      }
+
+      const grandTotalData = await response.json();
+      console.log(grandTotalData)
+      router.push('/pembelian')
+    } catch (error) {
+      console.error("Error calculating grand total:", error);
+      
+    }
+  }
 
   useEffect(() => {
     loadTransactions();
@@ -77,7 +102,7 @@ export default function KeranjangPage() {
       </div>
       <div className="mt-5 flex justify-between font-bold">
         <p>Total: {formattedPrice(grandTotal)}</p>
-        <Button>Buat Pesanan</Button>
+        <Button onClick={() => calculateGrandTotal()}>Buat Pesanan</Button>
       </div>
     </div>
   );
