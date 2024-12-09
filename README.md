@@ -5,6 +5,11 @@
 | Adnan Abdullah Juan           | 5025221155 | PBKK (D) |
 | Muhammad Gesang Ridho Widigdo | 5025221216 | PBKK (D) |
 
+| Module   | Link                                           |
+| -------- | ---------------------------------------------- |
+| FrontEnd | https://github.com/gesangwidigdo/fe-go-fp-pbkk |
+| BackEnd  | https://github.com/Djuanzz/be-go-fp-pbkk       |
+
 ## Tech Stack
 
 - [NextJs](https://nextjs.org/)
