@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const formSchema = z.object({
   email: z
@@ -92,7 +93,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="max-w-sm mx-auto mt-10">
+    <div className="max-w-sm mx-auto mt-7">
+      <h1 className="font-extrabold text-5xl mb-5">Login</h1>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           {/* Email Field */}
@@ -137,6 +140,15 @@ export default function LoginPage() {
           <Button type="submit">Login</Button>
         </form>
       </Form>
+      <p className="mt-5">
+        Belum memiliki akun?{" "}
+        <Link href="/register">
+          <span className="text-blue-500 underline cursor-pointer">
+            Register sekarang!
+          </span>
+        </Link>
+      </p>
     </div>
   );
 }
+
