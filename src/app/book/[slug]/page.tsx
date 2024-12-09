@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,11 @@ function formattedPrice(x: number) {
   return "Rp" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
-export default function BookDetail({ params }: { params: Promise<{ slug: string }> }) {
+export default function BookDetail({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const router = useRouter();
   const [book, setBook] = useState<BookDetail | null>(null);
   const [slug, setSlug] = useState<string | null>(null);
@@ -61,7 +65,7 @@ export default function BookDetail({ params }: { params: Promise<{ slug: string 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);
     setQuantity(Number(value));
-  }
+  };
 
   if (!book) {
     return <div>Loading...</div>;
@@ -69,49 +73,59 @@ export default function BookDetail({ params }: { params: Promise<{ slug: string 
 
   const AddToCart = async (id: string, quantity: number) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/book_transaction/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          book_id: id,
-          quantity: quantity,
-        }),
-      });
-    
+      const response = await fetch(
+        `http://localhost:5000/api/book_transaction/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            book_id: id,
+            quantity: quantity,
+          }),
+        }
+      );
+
       if (!response.ok) {
         if (response.status === 401) {
-          router.push('/login')
-          return
+          router.push("/login");
+          return;
         }
         return {
           notFound: true,
-        }
+        };
       }
-    
+
       const cartData = await response.json();
+      console.log(cartData.data);
+      router.push("/keranjang");
       return cartData.data;
     } catch (error) {
       console.error("Error adding to cart:", error);
+      router.push("/keranjang");
     }
-  }
+  };
 
   return (
     <div className="flex">
       {/* image and details */}
       <div className="mx-5">
-        <img 
+        <img
           className="w-64 max-w-lg mb-8 border-4 border-black p-1"
-          src={book.book_image} 
+          src={book.book_image}
           alt={book.title}
         />
         <div className="details">
           <p className="text-md mb-3 font-light">ISBN: {book.isbn}</p>
           <p className="text-md mb-3 font-light">Author: {book.author}</p>
-          <p className="text-md mb-3 font-light">Publication Year: {book.publication_year}</p>
-          <p className="text-md mb-3 font-light">Price: {formattedPrice(book.price)}</p>
+          <p className="text-md mb-3 font-light">
+            Publication Year: {book.publication_year}
+          </p>
+          <p className="text-md mb-3 font-light">
+            Price: {formattedPrice(book.price)}
+          </p>
         </div>
       </div>
 
@@ -138,17 +152,35 @@ export default function BookDetail({ params }: { params: Promise<{ slug: string 
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="quantity">Quantity</Label>
-                  <Input type="number" id="quantity" name="quantity" placeholder="0" min="1" max="10" value={quantity} onChange={handleQuantityChange} />
+                  <Input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    placeholder="0"
+                    min="1"
+                    max="10"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                  />
                 </div>
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="subtotal">Subtotal</Label>
-                  <Input type="text" id="subtotal" name="subtotal" placeholder={formattedPrice(0)} value={formattedPrice(subtotal)} readOnly />
+                  <Input
+                    type="text"
+                    id="subtotal"
+                    name="subtotal"
+                    placeholder={formattedPrice(0)}
+                    value={formattedPrice(subtotal)}
+                    readOnly
+                  />
                 </div>
               </div>
             </form>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button onClick={() => book && AddToCart(book.id, quantity)}>Add to Cart</Button>
+            <Button onClick={() => book && AddToCart(book.id, quantity)}>
+              Add to Cart
+            </Button>
           </CardFooter>
         </Card>
       </div>
@@ -168,12 +200,12 @@ export const fetchBooks = async () => {
   if (!response.ok) {
     return {
       notFound: true,
-    }
+    };
   }
 
   const booksData = await response.json();
   return booksData.data;
-}
+};
 
 export const fetchBookBySlug = async (slug: string) => {
   const response = await fetch(`http://localhost:5000/api/book/${slug}`, {
@@ -187,16 +219,17 @@ export const fetchBookBySlug = async (slug: string) => {
   if (!response.ok) {
     return {
       notFound: true,
-    }
+    };
   }
 
   const bookData = await response.json();
   return bookData.data;
-}
+};
 
 export const getStaticParams = async () => {
   const data = await fetchBooks();
   return data.map((book: BookDetail) => ({
     slug: book.slug,
   }));
-}
+};
+
