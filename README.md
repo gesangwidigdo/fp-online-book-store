@@ -11,3 +11,36 @@
 - [ShadcnUi](https://ui.shadcn.com/)
 
 ## Project Documentation
+
+### Login Page
+
+![login](public/login.png)
+
+### Register Page
+
+![register](public/register.png)
+
+### Home Page
+
+![home](public/home.png)
+
+### Book Details Page
+
+![bookdetail](public/bookdetail.png)
+
+### Cart Page
+
+![keranjang](public/keranjang.png)
+
+### Edit Order Page
+
+![editorder](public/editorder.png)
+
+### Transaction Page
+
+![transaksi](public/transaksi.png)
+
+### Transaction Details Page
+
+![detailtransaksi](public/detailtransaksi.png)
+

@@ -13,6 +13,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // 1. Define the schema for registration form
 const formSchema = z.object({
@@ -34,6 +36,8 @@ const formSchema = z.object({
 });
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -73,13 +77,16 @@ export default function RegisterPage() {
 
       const data = await response.json();
       console.log(data);
+      router.push("/login");
     } catch (error) {
       console.error("Error during registration:", error);
     }
   };
 
   return (
-    <div className="max-w-sm mx-auto mt-10">
+    <div className="max-w-sm mx-auto mt-7">
+      <h1 className="font-extrabold text-5xl mb-5">Register</h1>
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           {/* Name Field */}
@@ -213,6 +220,14 @@ export default function RegisterPage() {
           <Button type="submit">Register</Button>
         </form>
       </Form>
+      <p className="mt-5">
+        Sudah memiliki akun?{" "}
+        <Link href="/login">
+          <span className="text-blue-500 underline cursor-pointer">
+            Login sekarang!
+          </span>
+        </Link>
+      </p>
     </div>
   );
 }

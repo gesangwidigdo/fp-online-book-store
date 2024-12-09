@@ -11,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { set } from "react-hook-form";
 
 interface Book {
   book_image: string;
@@ -21,51 +20,9 @@ interface Book {
   total: number;
 }
 
-const invoices = [
-  {
-    invoice:
-      "http://books.google.com/books/content?id=-reD1g77BfsC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+function formattedPrice(x: number) {
+  return "Rp" + x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 
 const InvoicePage = ({ params }: { params: Promise<{ id: string }> }) => {
   const [id, setId] = useState<string | null>(null);
@@ -122,7 +79,6 @@ const InvoicePage = ({ params }: { params: Promise<{ id: string }> }) => {
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
-          {/* <TableHead className="w-[100px]">Invoice</TableHead> */}
           <TableHead className="font-bold text-center">Invoice</TableHead>
           <TableHead className="font-bold text-center">Title</TableHead>
           <TableHead className="font-bold text-center">Price</TableHead>
@@ -141,9 +97,13 @@ const InvoicePage = ({ params }: { params: Promise<{ id: string }> }) => {
               />
             </TableCell>
             <TableCell className="text-center">{book.title}</TableCell>
-            <TableCell className="text-center">{book.price}</TableCell>
+            <TableCell className="text-center">
+              {formattedPrice(book.price)}
+            </TableCell>
             <TableCell className="text-center">{book.quantity}</TableCell>
-            <TableCell className="text-right">{book.total}</TableCell>
+            <TableCell className="text-right">
+              {formattedPrice(book.total)}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -154,7 +114,7 @@ const InvoicePage = ({ params }: { params: Promise<{ id: string }> }) => {
           </TableCell>
           <TableCell className="text-right font-extrabold">
             {" "}
-            {totalAmount}{" "}
+            {formattedPrice(totalAmount)}{" "}
           </TableCell>
         </TableRow>
       </TableFooter>
